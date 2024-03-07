@@ -1,0 +1,151 @@
+FA5
+================
+2024-03-07
+
+6.  
+
+``` r
+# Define the probabilities based on the percentages given in the question
+prob_server1 <- 0.40
+prob_server2 <- 0.25
+prob_server3 <- 0.35
+
+error_server1 <- 0.01
+error_server2 <- 0.02
+error_server3 <- 0.015
+
+# (a) Calculate the probability of receiving an email containing an error
+prob_error <- (prob_server1 * error_server1) + 
+              (prob_server2 * error_server2) + 
+              (prob_server3 * error_server3)
+
+# (b) Calculate the probability that a message will arrive without error
+prob_no_error <- 1 - prob_error
+
+# (c) Use Bayes' theorem to calculate the probability that a message was sent through server 1 given that it arrived without error
+prob_server1_given_no_error <- (prob_server1 * (1 - error_server1)) / prob_no_error
+
+# Print the results
+print(paste("Probability of receiving an email containing an error:", prob_error))
+```
+
+    ## [1] "Probability of receiving an email containing an error: 0.01425"
+
+``` r
+print(paste("Probability that a message will arrive without error:", prob_no_error))
+```
+
+    ## [1] "Probability that a message will arrive without error: 0.98575"
+
+``` r
+print(paste("Probability that a message was sent through server 1 given it arrived without error:", prob_server1_given_no_error))
+```
+
+    ## [1] "Probability that a message was sent through server 1 given it arrived without error: 0.401724575196551"
+
+7.  
+
+``` r
+# Define the given probabilities
+p_buy <- 0.70  # Probability of intending to buy
+p_not_buy <- 0.20  # Probability of intention not to buy
+p_undecided <- 0.10  # Probability of being undecided
+
+# Conditional probabilities
+p_upgrade_given_not_buy <- 0.10
+p_upgrade_given_buy <- 0.40
+p_upgrade_given_undecided <- 0.20
+
+# (a) Calculate the probability that a manager will not upgrade the hardware
+p_not_upgrade <- p_not_buy * (1 - p_upgrade_given_not_buy) +
+                 p_buy * (1 - p_upgrade_given_buy) +
+                 p_undecided * (1 - p_upgrade_given_undecided)
+
+# (b) For the posterior probability of B given G, we need Bayes' theorem
+# P(B|G) = P(G|B) * P(B) / P(G)
+
+# First, calculate P(G)
+p_upgrade <- p_not_buy * p_upgrade_given_not_buy +
+             p_buy * p_upgrade_given_buy +
+             p_undecided * p_upgrade_given_undecided
+
+# Now, calculate P(B|G)
+p_buy_given_upgrade <- p_upgrade_given_buy * p_buy / p_upgrade
+
+# (c) Construct the tree diagram probabilities
+# These are the joint probabilities P(G), P(B|G), P(B), P(C|G), P(C)
+# Since P(C) = P(not A and not B) = 1 - P(A) - P(B), we calculate P(C) first
+p_c <- 1 - p_not_buy - p_buy
+
+# Joint probabilities
+p_g_and_b <- p_buy_given_upgrade * p_upgrade
+p_g_and_c <- p_upgrade_given_undecided * p_undecided
+
+# Printing the probabilities calculated above
+cat("Probability P(~G): ", p_not_upgrade, "\n")
+```
+
+    ## Probability P(~G):  0.68
+
+``` r
+cat("Posterior probability P(B|G): ", p_buy_given_upgrade, "\n")
+```
+
+    ## Posterior probability P(B|G):  0.875
+
+``` r
+cat("Joint probability P(G): ", p_upgrade, "\n")
+```
+
+    ## Joint probability P(G):  0.32
+
+``` r
+cat("Joint probability P(G and B): ", p_g_and_b, "\n")
+```
+
+    ## Joint probability P(G and B):  0.28
+
+``` r
+cat("Joint probability P(G and C): ", p_g_and_c, "\n")
+```
+
+    ## Joint probability P(G and C):  0.02
+
+``` r
+cat("Probability P(C): ", p_c, "\n")
+```
+
+    ## Probability P(C):  0.1
+
+13. 
+
+``` r
+# Probabilities of spyware entry
+p_internet <- 0.7
+p_email <- 0.3
+
+# Probabilities of detection
+p_detect_internet <- 0.6
+p_detect_email <- 0.8
+
+# (a) Probability that the spyware infects the system is the sum of the probabilities of it coming through each medium
+p_infect <- p_internet + p_email
+
+# (b) Probability that the spyware came through the Internet given that it was detected
+# First calculate the total probability that the spyware is detected
+p_detected <- p_internet * p_detect_internet + p_email * p_detect_email
+
+# Now use Bayes' theorem to calculate P(Internet | Detected)
+p_internet_given_detected <- (p_detect_internet * p_internet) / p_detected
+
+# Print the results
+cat("Probability the spyware infects the system (P(Infect)): ", p_infect, "\n")
+```
+
+    ## Probability the spyware infects the system (P(Infect)):  1
+
+``` r
+cat("Probability it came through the Internet given detection (P(Internet | Detected)): ", p_internet_given_detected, "\n")
+```
+
+    ## Probability it came through the Internet given detection (P(Internet | Detected)):  0.6363636
